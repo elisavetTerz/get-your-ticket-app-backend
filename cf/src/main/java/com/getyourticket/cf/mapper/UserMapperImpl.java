@@ -14,8 +14,6 @@ public class UserMapperImpl implements UserMapper {
         }
 
         User user = new User();
-        user.setFirstname(userRegisterDTO.getFirstname());
-        user.setLastname(userRegisterDTO.getLastname());
         user.setEmail(userRegisterDTO.getEmail());
         user.setPassword(userRegisterDTO.getPassword());
         user.setUsername(userRegisterDTO.getUsername());
@@ -30,8 +28,6 @@ public class UserMapperImpl implements UserMapper {
         }
 
         UserRegisterDTO userRegisterDTO = new UserRegisterDTO();
-        userRegisterDTO.setFirstname(user.getFirstname());
-        userRegisterDTO.setLastname(user.getLastname());
         userRegisterDTO.setEmail(user.getEmail());
         userRegisterDTO.setPassword(user.getPassword());
         userRegisterDTO.setUsername(user.getUsername());

@@ -6,14 +6,13 @@ import com.getyourticket.cf.repository.UserRepository;
 import com.getyourticket.cf.mapper.UserMapper;
 import com.getyourticket.cf.service.exceptions.UserAlreadyExistsExceptions;
 import com.getyourticket.cf.service.exceptions.UserNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -53,14 +52,6 @@ public class UserServiceImpl implements IUserService {
         return user;
     }
 
-    @Override
-    public List<User> getUsersByLastname(String lastname) throws EntityNotFoundException {
-        List<User> users = userRepository.findByLastnameStartingWith(lastname);
-        if (users.isEmpty()) {
-            throw new EntityNotFoundException("Users not found");
-        }
-        return users;
-    }
 
     @Override
     public User getUserById(Integer id) throws UserNotFoundException {
@@ -72,10 +63,12 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User loginUser(String username, String password) throws UserNotFoundException, Exception {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User with username: " + username + " not found"));
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            return user;
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("User with username: " + username + " not found");
+        }
+        if (passwordEncoder.matches(password, user.get().getPassword())) {
+            return user.orElse(null);
         } else {
             throw new Exception("Invalid credentials");
         }

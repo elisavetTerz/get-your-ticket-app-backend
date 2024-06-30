@@ -3,7 +3,6 @@ package com.getyourticket.cf.mapper;
 import com.getyourticket.cf.dto.EventDTO;
 import com.getyourticket.cf.model.Event;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +23,8 @@ public class EventMapperImpl implements EventMapper {
         eventDTO.setStartTime(event.getStartTime());
         eventDTO.setAvailableSeats(event.getAvailableSeats());
 
-        return eventDTO;    }
+        return eventDTO;
+    }
 
     @Override
     public Event toEntity(EventDTO eventDTO) {

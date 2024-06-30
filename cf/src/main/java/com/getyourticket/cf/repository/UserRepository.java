@@ -13,10 +13,14 @@ import java.util.Optional;
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-//    Custom queries
-    List<User> findByLastnameStartingWith(String lastname);
+    //    Custom queries
     User findUserById(Integer id);
+
     Optional<User> findByUsername(String username);
+
     Optional<User> findByEmailAndPassword(String email, String password);
 
+    Boolean existsByUsername(String username);
+
+    Boolean existsByEmail(String email);
 }

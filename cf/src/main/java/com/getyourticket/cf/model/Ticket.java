@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 public class Ticket {
 
     @Id
-    @Column(name="id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -38,10 +38,10 @@ public class Ticket {
     // In case the user can buy tickets for other persons with no account
     // private String purchaserName;
     // private String purchaserEmail;
-    @Column(name="seat_number", nullable = true)
+    @Column(name = "seat_number", nullable = true)
     private String seatNumber;
 
-    @Column(name="price", nullable = true)
+    @Column(name = "price", nullable = true)
     private BigDecimal price;
 
     @Enumerated(EnumType.STRING)
@@ -54,7 +54,6 @@ public class Ticket {
     @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
 
     public LocalDateTime getEventStartTime() {
         return LocalDateTime.of(event.getDate(), event.getStartTime());

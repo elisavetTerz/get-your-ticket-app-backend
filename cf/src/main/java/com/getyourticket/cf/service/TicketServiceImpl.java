@@ -1,5 +1,6 @@
 package com.getyourticket.cf.service;
 
+import com.getyourticket.cf.authentication.jwt.JwtUtils;
 import com.getyourticket.cf.dto.TicketDTO;
 import com.getyourticket.cf.mapper.TicketMapper;
 import com.getyourticket.cf.model.Event;
@@ -12,30 +13,29 @@ import com.getyourticket.cf.service.exceptions.TicketNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class TicketServiceImpl implements ITicketService {
-    @Autowired
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
     private final TicketRepository ticketRepository;
-    @Autowired
     private final UserRepository userRepository;
-    @Autowired
     private final EventRepository eventRepository;
-    @Autowired
-    private TicketMapper ticketMapper;
-
+    private final TicketMapper ticketMapper;
 
     @Override
     public TicketDTO addTicket(TicketDTO ticketDTO) throws Exception {
+        logger.info("Received ticketDTO: {}", ticketDTO);
+
         User user = userRepository.findById(ticketDTO.getUserId().getId())
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
@@ -63,16 +63,16 @@ public class TicketServiceImpl implements ITicketService {
     public List<TicketDTO> getTicketsByUserEmail(String email) throws EntityNotFoundException {
         List<Ticket> tickets = ticketRepository.findByUserEmail(email);
         if (tickets.isEmpty()) {
-            throw new EntityNotFoundException("No tickets found for the given email: " +email);
+            throw new EntityNotFoundException("No tickets found for the given email: " + email);
         }
         return tickets.stream().map(ticketMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public List<TicketDTO> getTicketsByUserLastname(String lastname) throws EntityNotFoundException {
-        List<Ticket> tickets = ticketRepository.findByUserLastname(lastname);
+    public List<TicketDTO> getTicketsByUsername(String username) throws EntityNotFoundException {
+        Optional<Ticket> tickets = ticketRepository.findByUserUsername(username);
         if (tickets.isEmpty()) {
-            throw new EntityNotFoundException("No tickets found for the given lastname: " + lastname);
+            throw new EntityNotFoundException("No tickets found for the given lastname: " + username);
         }
         return tickets.stream().map(ticketMapper::toDto).collect(Collectors.toList());
     }

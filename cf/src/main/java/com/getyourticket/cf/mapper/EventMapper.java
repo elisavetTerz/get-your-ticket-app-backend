@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface EventMapper {
     EventDTO toDto(Event event);
+
     Event toEntity(EventDTO eventDTO);
 
     List<EventDTO> toDto(List<Event> events);

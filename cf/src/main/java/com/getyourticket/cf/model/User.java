@@ -1,6 +1,9 @@
 package com.getyourticket.cf.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,31 +21,36 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "USERS")
+@Table(name = "USERS",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username"),
+                @UniqueConstraint(columnNames = "email")
+        })
 public class User {
     @Id
-    @Column(name="id", length = 45)
+    @Column(name = "id", length = 45)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="firstname", length = 45)
-    private String firstname;
+    @Column(name = "username")
+    private String username;
 
-    @Column(name="lastname", length = 45)
-    private String lastname;
-
-    @Column(name="email")
+    @Column(name = "email")
+    @Email
     private String email;
 
-    @Column(name="password")
+    @Column(name = "password")
     private String password;
 
-    @Column(name="username")
-    private String username;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private List<Ticket> tickets;
-//    private Set<Ticket> tickets = new HashSet<>();
     @OneToOne(mappedBy = "user")
     private Cart cart;
 }

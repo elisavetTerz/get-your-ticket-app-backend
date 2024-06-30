@@ -13,11 +13,13 @@ public class TicketMapperImpl implements TicketMapper {
 
     private final UserMapper userMapper;
     private final EventMapper eventMapper;
+
     public TicketMapperImpl(UserMapper userMapper, EventMapper eventMapper) {
         this.userMapper = userMapper;
         this.eventMapper = eventMapper;
 
     }
+
     @Override
     public TicketDTO toDto(Ticket ticket) {
         if (ticket == null) return null;
@@ -39,7 +41,7 @@ public class TicketMapperImpl implements TicketMapper {
 
     @Override
     public Ticket toEntity(TicketDTO ticketDTO) {
-        if (ticketDTO ==  null) return null;
+        if (ticketDTO == null) return null;
 
         User user = userMapper.toEntity(ticketDTO.getUserId());
         Event event = eventMapper.toEntity(ticketDTO.getEventId());

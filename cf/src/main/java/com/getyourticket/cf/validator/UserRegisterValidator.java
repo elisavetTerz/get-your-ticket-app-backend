@@ -18,15 +18,6 @@ public class UserRegisterValidator implements Validator {
     public void validate(Object target, Errors errors) {
         UserRegisterDTO userRegisterDTO = (UserRegisterDTO) target;
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstname", "empty");
-        if (userRegisterDTO.getFirstname().length() < 3 || userRegisterDTO.getFirstname().length() > 50) {
-            errors.rejectValue("firstname", "size");
-        }
-
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastname", "empty");
-        if (userRegisterDTO.getLastname().length() < 3 || userRegisterDTO.getLastname().length() > 50) {
-            errors.rejectValue("lastname", "size");
-        }
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "empty");
         if (!userRegisterDTO.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
@@ -42,10 +33,5 @@ public class UserRegisterValidator implements Validator {
         if (userRegisterDTO.getUsername().length() < 3 || userRegisterDTO.getUsername().length() > 50) {
             errors.rejectValue("username", "size");
         }
-
-        // Optionally, you can add a check to see if the username already exists in the database.
-        // if (userService.isUsernameExists(userRegisterDTO.getUsername())) {
-        //     errors.rejectValue("username", "exists");
-        // }
     }
 }
